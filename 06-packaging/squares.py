@@ -1,6 +1,8 @@
 """Computation of weighted average of squares."""
 
 import argparse
+import statistics
+import math
 
 def average_of_squares(list_of_numbers, list_of_weights=None):
     """
@@ -51,26 +53,48 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
-    #with open("numbers.txt", "r") as numbers_file:
-    #    numbers_strings = numbers_file.readlines()
-    # TODO Can we make this optional, so that we don't need a weights file?
-    #with open("weights.txt", "r") as weights_file:
-    #    weight_strings = weights_file.readlines()
-
     parser = argparse.ArgumentParser(description="Process weighted averages from two files")
-    parser.add_argument('numbers')
-    parser.add_argument('weights')
-    args = parser.parse_args()
+    print("Do you want to use weights?")
+    choice = input("> ")
+    if choice == "Yes":
+        parser.add_argument('numbers')
+        parser.add_argument('weights')
+        args = parser.parse_args()
 
-    with open(args.numbers, "r") as numbers_file:
-        numbers_strings = numbers_file.readlines()
+        with open(args.numbers, "r") as numbers_file:
+            numbers_strings = numbers_file.readlines()
 
-    with open(args.weights, "r") as weights_file:
-        weights_strings = weights_file.readlines()
+        with open(args.weights, "r") as weights_file:
+            weights_strings = weights_file.readlines()
 
-    numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weights_strings)
-    # TODO Can we add the option of computing the square root of this result?
-    result = average_of_squares(numbers, weights)
-    # TODO Can we write the result in a file instead of printing it?
-    print(result)
+        numbers = convert_numbers(numbers_strings)
+        weights = convert_numbers(weights_strings)
+        result = average_of_squares(numbers, weights)
+        print(result)
+
+        print("Do you also want to compute the square root?")
+        choice2 = input("> ")
+        if choice2 == "Yes":
+            result2 = math.sqrt(result)
+            print(result2)
+        elif choice2 == "No":
+            None 
+
+        print("Do you want to save result in a file?")
+        choice3 = input("> ")
+        if choice3 == "Yes":
+            f = open("result.txt", "w")
+            f.write(str(result)) 
+        # TODO Can we write the result in a file instead of printing it?
+        
+    elif choice == "No":
+        parser.add_argument('numbers')
+        parser.add_argument('weights')
+        args = parser.parse_args()
+
+        with open(args.numbers, "r") as numbers_file:
+            numbers_strings = numbers_file.readlines()
+
+        numbers = convert_numbers(numbers_strings)
+        result = statistics.mean(numbers) 
+        print(result)
